@@ -4,6 +4,7 @@ const Koa = require("koa");
 const mysql = require("mysql2/promise");
 const api = require("./routing/api");
 const seed = require("./db/seed");
+const koaCors = require("@koa/cors"); 
 
 const init = async function() {
 
@@ -27,7 +28,7 @@ const init = async function() {
 
     if(shouldSeed) {
       console.log("Seeding database");
-      seed.forEach(async sql => {
+      seed.forEach(async(sql) => {
         conn.execute({
           sql,
         });
@@ -45,7 +46,16 @@ const init = async function() {
 
   // Listen
   const server = new Koa();
+  // Middleware
+  server.use(
+    koaCors({
+      origin: process.env.CORS_ORIGIN || "http://localhost:80",
+      allowHeaders: "Content-Type",
+      credentials: true,
+    })
+  );
   server.use(api.mount("/api"));
+
   try {
     server.listen(port, host, () => {
 
@@ -63,9 +73,9 @@ const init = async function() {
   } catch(error) {
     throw new Error(`HTTP Server listening failed: ${error}`);
   }
-}
+};
 
-init().catch(e => {
+init().catch((e) => {
   console.error(e);
   process.exit(1);
 });

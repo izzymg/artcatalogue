@@ -9,8 +9,9 @@ Art form upload
 # Client
 
 1. `npm i`
-2. `npm run build`
-3. Serve dist/
+2. `cp example.env .env` and edit it
+3. `npm run build`
+4. Serve dist/
 
 # Server
 

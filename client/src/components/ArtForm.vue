@@ -1,14 +1,15 @@
 <template>
   <div class="art-form">
+      <h4 class="page-message" v-html="message"></h4>
       <form autocomplete="off" class="art-form-form">
           <div class="details-wrapper">
             <label> Your details </label>
-            <input v-model="firstName" type="text" placeholder="First Name">
-            <input v-model="lastName" type="text" placeholder="Last Name">
+            <input v-model="formData.firstName" type="text" placeholder="First Name">
+            <input v-model="formData.lastName" type="text" placeholder="Last Name">
           </div>
           <div class="section-wrapper">
             <label> Section </label>
-            <select class="section-select" v-model="section">
+            <select class="section-select" v-model="formData.section">
                 <option value="jewellery">Jewellery</option>
                 <option value="textiles">Textiles</option>
                 <option value="painting">Painting</option>
@@ -22,17 +23,24 @@
 </template>
 
 <script>
+import repo from "../repo";
 export default {
     name: "ArtForm",
     data() {
         return {
-            firstName: null,
-            lastName: null,
-            section: "jewellery",
+            message: null,
+            formData: {
+                firstName: null,
+                lastName: null,
+                section: "jewellery",
+            },
         };
     },
     methods: {
-        async onSubmit() { }
+        async onSubmit() {
+            const res = await repo.submitForm(this.formData);
+            this.message = JSON.stringify(res.data);
+        }
     }
 }
 </script>
