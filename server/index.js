@@ -3,6 +3,7 @@ const path = require("path");
 const Koa = require("koa");
 const mysql = require("mysql2/promise");
 const api = require("./routing/api");
+const seed = require("./db/seed");
 
 const init = async function() {
 
@@ -19,9 +20,20 @@ const init = async function() {
   // Start database connection
   console.log("Establishing database connection");
   const db = mysql.createPool(process.env.DB_URL || "mysql://root@localhost/artsite");
+  const shouldSeed = parseInt(process.env.SEED_ON_STARTUP);
   try {
     const conn = await db.getConnection();
     await conn.ping();
+
+    if(shouldSeed) {
+      console.log("Seeding database");
+      seed.forEach(async sql => {
+        conn.execute({
+          sql,
+        });
+      });
+    }
+
     await conn.release();
   } catch(error) {
     throw new Error(`Database connection failure\n${error}`);
