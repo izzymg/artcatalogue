@@ -28,5 +28,6 @@ module.exports = {
             "imports": "always",
             "objects": "always",
         }],
+        "require-atomic-updates": "never"
     },
 };

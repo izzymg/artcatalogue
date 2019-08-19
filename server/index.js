@@ -1,9 +1,7 @@
 const dotenv = require("dotenv");
 const path = require("path");
 const Koa = require("koa");
-const mysql = require("mysql2/promise");
 const api = require("./routing/api");
-const seed = require("./db/seed");
 const koaCors = require("@koa/cors"); 
 
 const init = async function() {
@@ -18,27 +16,15 @@ const init = async function() {
     throw new Error(`Loading environment failed\n${config.error}`);
   }
 
-  // Start database connection
-  console.log("Establishing database connection");
-  const db = mysql.createPool(process.env.DB_URL || "mysql://root@localhost/artsite");
-  const shouldSeed = parseInt(process.env.SEED_ON_STARTUP);
-  try {
-    const conn = await db.getConnection();
-    await conn.ping();
+  // Test DB connection (post config init)
+  const repo = require("./db/repo")(
+    process.env.DB_URL,
+    parseInt(process.env.SEED_ON_STARTUP, 10)
+  );
 
-    if(shouldSeed) {
-      console.log("Seeding database");
-      seed.forEach(async(sql) => {
-        conn.execute({
-          sql,
-        });
-      });
-    }
-
-    await conn.release();
-  } catch(error) {
-    throw new Error(`Database connection failure\n${error}`);
-  }
+  const conn = await repo.db.getConnection();
+  await conn.ping();
+  await conn.release();
 
   // Parse HTTP server address
   const host = process.env.HOST || "localhost";
@@ -64,7 +50,7 @@ const init = async function() {
       // Shutdown hooks
       async function shutdown() {
         console.log("Server shutting down");
-        await db.end();
+        await repo.db.end();
         process.exit(0);
       }
       process.on("SIGINT", shutdown);
