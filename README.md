@@ -17,6 +17,6 @@ Art form upload
 
 1. Spin up a MySQL/MariaDB instance
 2. `create database artsite default charset utf8mb4;`
-3. `cp example.env .env` and edit it
+3. Edit `config.js`
 4. `npm i`
 5. `npm start`

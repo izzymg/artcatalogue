@@ -1,52 +1,49 @@
-const dotenv = require("dotenv");
-const path = require("path");
 const Koa = require("koa");
 const api = require("./routing/api");
-const koaCors = require("@koa/cors"); 
+const config = require("./config");
+const koaCors = require("@koa/cors");
+const repo = require("./db/repo");
+const seed = require("./db/seed");
 
 const init = async function() {
 
-  // Configuration init
-  console.log("Parsing config");
-  const config = dotenv.config({
-    path: path.join(__dirname, ".env"),
-  });
-
-  if (config.error) {
-    throw new Error(`Loading environment failed\n${config.error}`);
-  }
-
-  // Test DB connection (post config init)
-  const repo = require("./db/repo")(
-    process.env.DB_URL,
-    parseInt(process.env.SEED_ON_STARTUP, 10)
-  );
-
+  // Test database connection
+  console.log("Testing database connection");
   const conn = await repo.db.getConnection();
   await conn.ping();
   await conn.release();
 
-  // Parse HTTP server address
-  const host = process.env.HOST || "localhost";
-  const port = process.env.PORT || 3000;
+  if(config.database.seedOnStartup) {
+    try {
+        console.log("Seeding database");
+        seed.forEach(async(sql) => repo.db.execute({ sql, }));
+    } catch(error) {
+      throw new Error(`Failure seeding database\n${error}`);
+    }
+  }
 
-  // Listen
+  // HTTP server setup
+  const { host, port, corsOrigin } = config.server;
   const server = new Koa();
-  // Middleware
+
+  // Allow cross-origin
   server.use(
     koaCors({
-      origin: process.env.CORS_ORIGIN || "http://localhost:80",
+      origin: corsOrigin,
       allowHeaders: "Content-Type",
       credentials: true,
     })
   );
+
+  // Mount API routes
   server.use(api.mount("/api"));
 
+  // Attempt to listen
+  console.log(`Starting HTTP server on ${host}:${port} in ${process.env.NODE_ENV} mode`);
   try {
     server.listen(port, host, () => {
 
-      console.log(`Server started on ${host}:${port} in ${process.env.NODE_ENV} mode`);
-
+      console.log("Listening");
       // Shutdown hooks
       async function shutdown() {
         console.log("Server shutting down");
