@@ -6,6 +6,10 @@ const router = new Router({
   onMethodNotAllowed: (ctx) => ctx.body = "405: Method not allowed.",
 });
 
+/**
+ * Takes user inputted form data and validates all fields.
+ * @returns An array of human readable errors.
+*/
 function validateForm({ firstName, lastName, }) {
   const errors = [];
 
@@ -18,6 +22,20 @@ function validateForm({ firstName, lastName, }) {
   }
   return errors;
 }
+
+// Form GET handler
+router.get(
+  "/:id",
+  async function(ctx) {
+    const formId = ctx.params.id;
+    const formData = await repo.getForm(formId);
+    ctx.assert(formData, 404, "No form found by that ID");
+    ctx.body = {
+      message: "Success",
+      formData,
+    };
+  }
+)
 
 // Form POST handler
 router.post(

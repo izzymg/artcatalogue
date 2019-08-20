@@ -18,18 +18,34 @@ const db = mysql.createPool(url);
  * Inserts a new ArtSite form into the database. Returns its unique ID. 
 */
 async function insertForm({ firstName, lastName, }) {
-  const id = uuid();
+  const submissionId = uuid();
   await db.query({
     sql: `INSERT INTO entries SET
             submission_id = ?,
             first_name = ?,
             last_name = ?`,
-    values: [id, firstName, lastName,],
+    values: [submissionId, firstName, lastName,],
   });
-  return id;
+  return submissionId;
+}
+
+/**
+ * Fetches a form by its unique ID and returns all fields.
+*/
+async function getForm(submissionId) {
+  const [res] = await db.execute({
+    sql: `SELECT
+          submission_id AS submissionId,
+          first_name AS firstName,
+          last_name AS lastName
+          FROM entries WHERE submission_id = ?`,
+    values: [submissionId],
+  });
+  return res[0];
 }
 
 module.exports = {
   db,
   insertForm,
+  getForm,
 };
