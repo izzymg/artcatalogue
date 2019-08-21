@@ -18,16 +18,16 @@
           <select class="section-select" v-model="formData.section">
             <option value="PHEA">PHEA</option>
             <option value="Jewellery/Textiles">Jewellery/Textiles</option>
-            <option value="Painting">Painting</option>
+            <option value="Paintings">Paintings</option>
             <option value="Sculptures/Ceramics">Sculptures/Ceramics</option>
-            <option value="Printmaking">Printmaking</option>
+            <option value="Printmakings">Printmakings</option>
           </select>
         </div>
       </div>
       <CatalogueItem/>
       <div class="submit-wrapper">
-        <h4 class="page-message" v-html="message"></h4>
         <input type="submit" value="Done" @click.stop.prevent="onSubmit">
+        <p class="page-message" v-html="message"></p>
       </div>
     </form>
   </div>
@@ -90,6 +90,11 @@ export default {
 </script>
 
 <style lang="scss">
+.page-message {
+  font-size: 0.7em;
+  margin: 0;
+  text-align: center;
+}
 .art-form {
   margin-left: 9px;
 }

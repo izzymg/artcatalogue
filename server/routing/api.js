@@ -6,11 +6,13 @@ const router = new Router({
   onMethodNotAllowed: (ctx) => ctx.body = "405: Method not allowed.",
 });
 
+const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Textiles", "Printmakings"];
+
 /**
  * Takes user inputted form data and validates all fields.
  * @returns An array of human readable errors.
 */
-function validateForm({ firstName, lastName, }) {
+function validateForm({ firstName, lastName, title, section, siteMap }) {
   const errors = [];
 
   if(firstName && lastName) {
@@ -20,6 +22,20 @@ function validateForm({ firstName, lastName, }) {
   } else {
     errors.push("First and last names required");
   }
+
+  if(title && title.length > 50) {
+    errors.push("Title must not exceed 50 characters");
+  }
+
+  if(sections.indexOf(section) == -1) {
+    errors.push("Invalid section");
+  }
+
+  const siteMapInt = parseInt(siteMap);
+  if(!siteMapInt || siteMapInt > 100 || siteMapInt < 1) {
+    errors.push("Site MAP number must be from 1 to 100");
+  }
+
   return errors;
 }
 
@@ -45,7 +61,8 @@ router.post(
     const formData = await cobody.json(ctx, { strict: true, });
     const formErrors = validateForm(formData);
     if(formErrors.length > 0) {
-      return ctx.throw(400, formErrors[0]);
+      ctx.throw(400, formErrors[0]);
+      return;
     }
     
     const formId = await repo.insertForm(formData);
