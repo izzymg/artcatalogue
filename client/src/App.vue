@@ -1,11 +1,8 @@
 <template>
   <div id="app">
-    <h1 class="page-title"> Art Site Form </h1>
-    <h4 class="page-desc">
-      <span class="poly"> Otago Polytechnic </span>
-      <span class="sep"> | </span>
-      <a class="op-link" href="https://www.op.ac.nz/study/creative/art/">Art School</a>
-    </h4>
+    <div class="nav-bar">
+      <h3 class="page-title"> Otago PolyTech ArtCat Form </h3>
+    </div>
     <ArtForm/>
   </div>
 </template>
@@ -23,30 +20,37 @@ export default {
 <style lang="scss">
 
 #app {
-  font-family: "Montserrat", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #3b3b3b;
-  text-align: center;
+  color: hsl(0, 0%, 10%);
+  text-align: left;
+  font-size: 1.4em;
 }
 
-.page-title {
-  text-align: center;
+body {
+  margin: 0;
 }
 
-.page-desc .poly {
-  color: #53453E;
-}
-
-.page-desc .op-link {
-  color: #7b7361;
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  background: #2c2c2c;
+  padding: 10px;
+  .page-title {
+    margin: 0;
+    font-size: 0.9em;
+    color: #fff;
+  }
 }
 
 input[type="text"], input[type="number"], select {
-  padding: 5px;
+  font-size: 0.7em;
+  padding: 12px;
   border-radius: none;
   border: 1px solid hsl(0, 0%, 82%);
   box-shadow: inset 2px 2px 5px hsl(0, 0%, 92%);
+  min-width: 30vw;
   &:focus {
     border: 1px solid #1DAEEA;
   }
@@ -73,6 +77,10 @@ input, select {
 label {
   display: block;
   margin: 15px 0;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
 }
 
 </style>

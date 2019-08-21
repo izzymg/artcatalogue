@@ -1,30 +1,33 @@
 <template>
   <div class="art-form">
     <form autocomplete="off" class="art-form-form">
-      <div class="details-wrapper">
-        <label> Your details </label>
-        <input v-model="formData.firstName" type="text" placeholder="First Name">
-        <input v-model="formData.lastName" type="text" placeholder="Last Name">
+      <div class="initial-wrapper">
+        <div class="details-wrapper">
+          <label> Your details </label>
+          <input v-model="formData.firstName" type="text" placeholder="First Name">
+          <input v-model="formData.lastName" type="text" placeholder="Last Name">
+        </div>
+        <div class="ex-wrapper">
+          <label> Exhibition Title for Catalogue Heading </label>
+          <input v-model="formData.title" type="text" placeholder="Title (Optional)">
+          <label> Site MAP number </label>
+          <input v-model="formData.siteMap" type="number" max="100" placeholder="Site MAP number">
+        </div>
+        <div class="section-wrapper">
+          <label> Section </label>
+          <select class="section-select" v-model="formData.section">
+            <option value="PHEA">PHEA</option>
+            <option value="Jewellery/Textiles">Jewellery/Textiles</option>
+            <option value="Painting">Painting</option>
+            <option value="Sculptures/Ceramics">Sculptures/Ceramics</option>
+            <option value="Printmaking">Printmaking</option>
+          </select>
+        </div>
       </div>
-      <div class="ex-wrapper">
-        <label> Exhibition Title for Catalogue Heading </label>
-        <input v-model="formData.title" type="text" placeholder="(Optional)">
-        <label> Site MAP number </label>
-        <input v-model="formData.siteMap" type="number" max="100" placeholder="Site MAP number">
-      </div>
-      <div class="section-wrapper">
-        <label> Section </label>
-        <select class="section-select" v-model="formData.section">
-          <option value="PHEA">PHEA</option>
-          <option value="Jewellery/Textiles">Jewellery/Textiles</option>
-          <option value="Painting">Painting</option>
-          <option value="Sculptures/Ceramics">Sculptures/Ceramics</option>
-          <option value="Printmaking">Printmaking</option>
-        </select>
-      </div>
+      <CatalogueItem/>
       <div class="submit-wrapper">
         <h4 class="page-message" v-html="message"></h4>
-        <input type="submit" value="✔️ Done" @click.stop.prevent="onSubmit">
+        <input type="submit" value="Done" @click.stop.prevent="onSubmit">
       </div>
     </form>
   </div>
@@ -32,8 +35,12 @@
 
 <script>
 import repo from "../repo";
+import CatalogueItem from "../components/CatalogueItem";
 export default {
   name: "ArtForm",
+  components: {
+    CatalogueItem,
+  },
   data() {
     return {
       message: null,
@@ -82,11 +89,18 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.art-form {
+  margin-left: 9px;
+}
 .details-wrapper input {
   margin: 0 2px;
 }
 .submit-wrapper input {
   margin: 20px;
 }
+.initial-wrapper {
+  margin: 30px 0;
+}
+
 </style>
