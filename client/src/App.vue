@@ -42,7 +42,7 @@ export default {
   color: #7b7361;
 }
 
-input[type="text"], select {
+input[type="text"], input[type="number"], select {
   padding: 5px;
   border-radius: none;
   border: 1px solid hsl(0, 0%, 82%);
