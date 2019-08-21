@@ -6,7 +6,7 @@ const router = new Router({
   onMethodNotAllowed: (ctx) => ctx.body = "405: Method not allowed.",
 });
 
-const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Textiles", "Printmakings"];
+const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Ceramics", "Printmakings"];
 
 /**
  * Takes user inputted form data and validates all fields.
@@ -39,9 +39,18 @@ function validateForm({ firstName, lastName, title, section, siteMap }) {
   return errors;
 }
 
+// CSV GET handler
+router.get(
+  "/entries.csv",
+  async function(ctx) {
+    ctx.set("Content-Type", "text/csv");
+    ctx.body = await repo.getCsv();
+  }
+)
+
 // Form GET handler
 router.get(
-  "/:id",
+  "/forms/:id",
   async function(ctx) {
     const formId = ctx.params.id;
     const formData = await repo.getForm(formId);
