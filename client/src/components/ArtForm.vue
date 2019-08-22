@@ -28,7 +28,9 @@
         Add a Catalogue Item
       </h3>
       <div class="catalogue-items-wrapper">
-        <CatalogueItem :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
+        <transition-group name="fade">
+          <CatalogueItem :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
+        </transition-group>
       </div>
       <div class="catalogue-items-control-wrapper">
         <input :disabled="!previousCiValid" @click="onPrevCi" type="button" value="Prev">

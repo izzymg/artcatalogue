@@ -40,6 +40,13 @@ body {
   }
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 input[type="text"], input[type="number"], select {
   font-size: 0.7em;
   padding: 12px;
