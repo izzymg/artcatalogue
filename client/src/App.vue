@@ -24,7 +24,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: hsl(0, 0%, 10%);
-  text-align: left;
+  text-align: center;
   font-size: 1.4em;
 }
 
@@ -33,14 +33,10 @@ body {
 }
 
 .nav-bar {
-  display: flex;
-  justify-content: space-between;
-  background: #2c2c2c;
   padding: 10px;
   .page-title {
     margin: 0;
-    font-size: 0.9em;
-    color: #fff;
+    font-size: 1.8em;
   }
 }
 
@@ -56,7 +52,7 @@ input[type="text"], input[type="number"], select {
   }
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="button"] {
   cursor: pointer;
   padding: 15px;
   background: linear-gradient(217deg, #5a82a8, #6296c7 60%);
@@ -65,6 +61,9 @@ input[type="submit"] {
   color: #fff;
   &:hover {
     background: linear-gradient(217deg, #7f9bb6, #6296c7 60%);
+  }
+  &:disabled {
+    background: grey;
   }
 }
 
@@ -77,6 +76,11 @@ input, select {
 label {
   display: block;
   margin: 15px 0;
+  &.little-label {
+    display: inline;
+    font-size: 0.75em;
+    margin: 0 5px;
+  }
 }
 
 h1, h2, h3 {

@@ -24,9 +24,19 @@
           </select>
         </div>
       </div>
-      <CatalogueItem/>
+      <h3 class="catalogue-item-header">
+        Add a Catalogue Item
+      </h3>
+      <div class="catalogue-items-wrapper">
+        <CatalogueItem :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
+      </div>
+      <div class="catalogue-items-control-wrapper">
+        <input :disabled="!previousCiValid" @click="onPrevCi" type="button" value="Prev">
+        <input @click="onNextCi" type="button" :value="nextCiText">
+      </div>
+      <hr>
       <div class="submit-wrapper">
-        <input type="submit" value="Done" @click.stop.prevent="onSubmit">
+        <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
         <p class="page-message" v-html="message"></p>
       </div>
     </form>
@@ -51,12 +61,25 @@ export default {
         section: "PHEA",
         siteMap: 1,
       },
+      selectedCatalogueItem: 1,
+      catalogueItems: [1],
     };
   },
   computed: {
     // Caches site MAP number to watch changes on it 
     siteMapNumber() {
       return this.formData.siteMap;
+    },
+    // Should the previous catalogue item button be enabled
+    previousCiValid() {
+      return this.selectedCatalogueItem > 1 ? true : false;
+    },
+    nextCiText() {
+      if(this.selectedCatalogueItem == this.catalogueItems.length) {
+        return "New item";
+      } else {
+        return "Next";
+      }
     }
   },
   watch: {
@@ -70,6 +93,15 @@ export default {
     },
   },
   methods: {
+    onNextCi() {
+      if(this.selectedCatalogueItem == this.catalogueItems.length) {
+        this.catalogueItems.push(this.selectedCatalogueItem + 1);
+      }
+      this.selectedCatalogueItem++;
+    },
+    onPrevCi() {
+      this.selectedCatalogueItem--;
+    },
     async onSubmit() {
       this.message = "Submitting...";
       try {
@@ -90,22 +122,35 @@ export default {
 </script>
 
 <style lang="scss">
-.page-message {
-  font-size: 0.7em;
-  margin: 0;
-  text-align: center;
-}
+
 .art-form {
   margin-left: 9px;
+
+  .page-message {
+    font-size: 0.7em;
+    margin: 0;
+    text-align: center;
+  }
+
+  .catalogue-item-header {
+    margin: 5px 0;
+  }
+
+  .details-wrapper input {
+    margin: 0 2px;
+  }
+  .submit-wrapper input {
+    margin: 20px;
+  }
+  .initial-wrapper {
+    margin: 30px 0;
+  }
+  .catalogue-items-control-wrapper {
+    input {
+      margin: 0 30px;
+    }
+  }
 }
-.details-wrapper input {
-  margin: 0 2px;
-}
-.submit-wrapper input {
-  margin: 20px;
-}
-.initial-wrapper {
-  margin: 30px 0;
-}
+
 
 </style>
