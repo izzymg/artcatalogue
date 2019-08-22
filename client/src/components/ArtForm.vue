@@ -29,7 +29,7 @@
       </h3>
       <div class="catalogue-items-wrapper">
         <transition-group name="fade">
-          <CatalogueItem :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
+          <CatalogueItem @save="onCiSave" :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
         </transition-group>
       </div>
       <div class="catalogue-items-control-wrapper">
@@ -62,6 +62,7 @@ export default {
         title: null,
         section: "PHEA",
         siteMap: 1,
+        items: [],
       },
       selectedCatalogueItem: 1,
       catalogueItems: [1],
@@ -95,6 +96,9 @@ export default {
     },
   },
   methods: {
+    onCiSave(item) {
+      this.formData.items.push(item);
+    },
     onNextCi() {
       if(this.selectedCatalogueItem == this.catalogueItems.length) {
         this.catalogueItems.push(this.selectedCatalogueItem + 1);

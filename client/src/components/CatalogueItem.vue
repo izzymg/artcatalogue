@@ -2,24 +2,26 @@
   <div class="catalogue-item">
     <hr>
     <h3> Item {{ id }} </h3>
-    <form class="catalogue-item-form">
-      <div class="title-wrapper">
-        <input type="text" required v-model="title" placeholder="Title">
-      </div>
-      <div class="sale-wrapper">
-        <input type="checkbox" v-model="forSale" checked>
-        <label @click="forSale = !forSale" class="little-label">Item is for sale</label>
-      </div>
-      <div class="pricing-wrapper">
-        <label class="little-label">$</label>
-        <input v-model="dollars" :disabled="!forSale" type="number" placeholder="Dollars">
-        <label class="little-label">¢</label>
-        <input v-model="cents" :disabled="!forSale" type="number" placeholder="Cents">
-      </div>
-      <div class="save-wrapper">
-        <input type="submit" value="Save">
-      </div>
-    </form>
+    <transition name="fade">
+      <form :hidden="saved" class="catalogue-item-form">
+        <div class="title-wrapper">
+          <input type="text" required v-model="item.title" placeholder="Title">
+        </div>
+        <div class="sale-wrapper">
+          <input type="checkbox" v-model="item.forSale" checked>
+          <label @click="item.forSale = !item.forSale" class="little-label">Item is for sale</label>
+        </div>
+        <div class="pricing-wrapper">
+          <label class="little-label">$</label>
+          <input v-model="item.dollars" :disabled="!item.forSale" type="number" placeholder="Dollars">
+          <label class="little-label">¢</label>
+          <input v-model="item.cents" :disabled="!item.forSale" type="number" placeholder="Cents">
+        </div>
+      </form>
+    </transition>
+    <div class="save-wrapper">
+      <input :disabled="saved" @click.stop.prevent="onSave" type="submit" :value="saveText">
+    </div>
     <hr>
 </div>
 </template>
@@ -29,15 +31,29 @@ export default {
   name: "CatalogueItem",
   data() {
     return {
-      title: null,
-      forSale: true,
-      dollars: 0,
-      cents: 0,
+      saved: false,
+      item: {
+        title: null,
+        forSale: true,
+        dollars: 0,
+        cents: 0,
+      },
     };
   },
   props: {
     id: {
       type: Number,
+    }
+  },
+  computed: {
+    saveText() {
+      return this.saved ? "Saved" : "Save";
+    }
+  },
+  methods: {
+    onSave() {
+      this.saved = true;
+      this.$emit("save", this.item);
     }
   }
 };
