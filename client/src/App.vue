@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <div class="nav-bar">
-      <h3 class="page-title"> Otago PolyTech ArtCat Form </h3>
+      <h3 class="page-title"> Otago Polytechnic </h3>
+      <p class="page-desc">
+        Please fill out your details below for the art catalogue.
+      </p>
     </div>
     <ArtForm/>
   </div>
@@ -24,12 +27,17 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: hsl(0, 0%, 10%);
-  text-align: center;
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
 body {
-  margin: 0;
+  margin: 0 10px 0 10px;
+}
+
+.link {
+  color: rgb(48, 124, 172);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .nav-bar {
@@ -47,13 +55,18 @@ body {
   opacity: 0;
 }
 
+hr {
+  width: 30vw;
+  text-align: left;
+  margin: 20px 0;
+}
+
 input[type="text"], input[type="number"], select {
   font-size: 0.7em;
   padding: 12px;
   border-radius: none;
   border: 1px solid hsl(0, 0%, 82%);
   box-shadow: inset 2px 2px 5px hsl(0, 0%, 92%);
-  min-width: 30vw;
   &:focus {
     border: 1px solid #1DAEEA;
   }
@@ -61,16 +74,18 @@ input[type="text"], input[type="number"], select {
 
 input[type="submit"], input[type="button"] {
   cursor: pointer;
-  padding: 15px;
-  background: linear-gradient(217deg, #5a82a8, #6296c7 60%);
+  padding: 12px;
+  background: #67a3c2;
   border: none;
-  border-radius: none;
-  color: #fff;
+  border-radius: 4px;
+  color: #ffffff;
+  transition: background 200ms;
   &:hover {
-    background: linear-gradient(217deg, #7f9bb6, #6296c7 60%);
+    background: #377c9e;
   }
   &:disabled {
-    background: grey;
+    color: rgb(190, 190, 190);
+    background: linear-gradient(120deg, rgb(139, 139, 139), rgb(148, 147, 147));
   }
 }
 

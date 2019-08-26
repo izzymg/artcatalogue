@@ -1,21 +1,18 @@
 <template>
   <div class="catalogue-item">
-    <hr>
-    <h3> Item {{ id }} </h3>
     <transition name="fade">
-      <form :hidden="saved" class="catalogue-item-form">
+      <form v-if="!saved" class="catalogue-item-form">
         <div class="title-wrapper">
           <input type="text" required v-model="item.title" placeholder="Title">
         </div>
-        <div class="sale-wrapper">
-          <input type="checkbox" v-model="item.forSale" checked>
-          <label @click="item.forSale = !item.forSale" class="little-label">Item is for sale</label>
+        <label class="pricing-desc"> Pricing is optional </label>
+        <div class="dollars-wrapper">
+          <input v-model="item.dollars" type="number" placeholder="Dollars">
+          <label class="little-label">$ Dollars</label>
         </div>
-        <div class="pricing-wrapper">
-          <label class="little-label">$</label>
-          <input v-model="item.dollars" :disabled="!item.forSale" type="number" placeholder="Dollars">
-          <label class="little-label">¢</label>
-          <input v-model="item.cents" :disabled="!item.forSale" type="number" placeholder="Cents">
+        <div class="dollars-wrapper">
+          <input v-model="item.cents" type="number" placeholder="Cents">
+          <label class="little-label">¢ Cents</label>
         </div>
       </form>
     </transition>
@@ -23,7 +20,6 @@
       <input :disabled="saved" @click.stop.prevent="onSave" type="submit" :value="saveText">
       <input :disabled="!saved" @click.stop.prevent="onClear" type="submit" value="Clear">
     </div>
-    <hr>
 </div>
 </template>
 
@@ -35,7 +31,6 @@ export default {
       saved: false,
       item: {
         title: null,
-        forSale: true,
         dollars: 0,
         cents: 0,
       },
@@ -89,7 +84,6 @@ export default {
       this.$emit("save", {
         id: this.id,
         title: this.item.title,
-        forSale: this.item.forSale,
         value: this.value,
       });
     },
@@ -100,7 +94,6 @@ export default {
       this.saved = false;
       this.$emit("clear", this.id);
       this.item.title = null;
-      this.item.forSale = true;
       this.item.dollars = 0;
       this.item.cents = 0;
     }
@@ -113,7 +106,6 @@ export default {
   .catalogue-item {
     padding: 5px;
     width: 50%;
-    margin: 0 auto;
 
     .save-wrapper {
       margin: 10px 0;
@@ -122,15 +114,19 @@ export default {
       }
     }
 
-    .pricing-wrapper {
+    .pricing-desc {
+      font-size: 0.8em;
+      margin: 5px 10px;
+      font-style: italic;
+    }
+
+    .title-wrapper {
+      margin: 5px 0;
+    }
+
+    .dollars-wrapper, .cents-wrapper {
       display: flex;
-      justify-content: center;
       align-items: center;
-      input {
-        max-width: 100px;
-        min-width: unset;
-        display: block;
-      }
     }
   }
 
