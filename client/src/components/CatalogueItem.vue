@@ -48,12 +48,44 @@ export default {
   computed: {
     saveText() {
       return this.saved ? "Saved" : "Save";
+    },
+    dollars() {
+      return this.item.dollars;
+    },
+    cents() {
+      return this.item.cents;
+    },
+    // Value of items stored as an integer of cents
+    // Not graphically exposed
+    value() {
+      return (this.item.dollars * 100) + this.item.cents;
+    },
+  },
+  watch: {
+    dollars(n) {
+      this.item.dollars = parseInt(n, 10) || 0;
+      if(this.item.dollars < 0) {
+        this.item.dollars = 0;
+      }
+    },
+    cents(n) {
+      this.item.cents = parseInt(n, 10) || 0;
+      if(this.item.cents < 0) {
+        this.item.cents = 0;
+      } else if(this.item.cents > 99) {
+        this.item.dollars++;
+        this.item.cents = 0;
+      }
     }
   },
   methods: {
     onSave() {
       this.saved = true;
-      this.$emit("save", this.item);
+      this.$emit("save", {
+        title: this.item.title,
+        forSale: this.item.forSale,
+        value: this.value,
+      });
     }
   }
 };
