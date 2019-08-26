@@ -21,6 +21,7 @@
     </transition>
     <div class="save-wrapper">
       <input :disabled="saved" @click.stop.prevent="onSave" type="submit" :value="saveText">
+      <input :disabled="!saved" @click.stop.prevent="onClear" type="submit" value="Clear">
     </div>
     <hr>
 </div>
@@ -43,6 +44,7 @@ export default {
   props: {
     id: {
       type: Number,
+      required: true,
     }
   },
   computed: {
@@ -80,12 +82,27 @@ export default {
   },
   methods: {
     onSave() {
+      if(this.saved) {
+        return;
+      }
       this.saved = true;
       this.$emit("save", {
+        id: this.id,
         title: this.item.title,
         forSale: this.item.forSale,
         value: this.value,
       });
+    },
+    onClear() {
+      if(!this.saved) {
+        return;
+      }
+      this.saved = false;
+      this.$emit("clear", this.id);
+      this.item.title = null;
+      this.item.forSale = true;
+      this.item.dollars = 0;
+      this.item.cents = 0;
     }
   }
 };
@@ -100,6 +117,9 @@ export default {
 
     .save-wrapper {
       margin: 10px 0;
+      input {
+        margin: 0 5px;
+      }
     }
 
     .pricing-wrapper {

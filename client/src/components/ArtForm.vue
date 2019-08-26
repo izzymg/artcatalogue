@@ -29,12 +29,18 @@
       </h3>
       <div class="catalogue-items-wrapper">
         <transition-group name="fade">
-          <CatalogueItem @save="onCiSave" :hidden="ci != selectedCatalogueItem" v-for="ci in catalogueItems" v-bind:id="ci" :key="ci"/>
+          <CatalogueItem
+            @save="onCiSave" @clear="onCiClear"
+            :hidden="ci != selectedCiForm" v-for="ci in ciForms"
+            :id="ci" :key="ci"
+          >
+          </CatalogueItem>
         </transition-group>
       </div>
       <div class="catalogue-items-control-wrapper">
         <input :disabled="!previousCiValid" @click="onPrevCi" type="button" value="Prev">
-        <input @click="onNextCi" type="button" :value="nextCiText">
+        <input v-if="nextCiValid" @click="onNextCi" type="button" value="Next">
+        <input v-else @click="onNewCi" type="button" value="New Item">
       </div>
       <hr>
       <div class="submit-wrapper">
@@ -64,8 +70,8 @@ export default {
         siteMap: 1,
         items: [],
       },
-      selectedCatalogueItem: 1,
-      catalogueItems: [1],
+      ciForms: 1,
+      selectedCiForm: 1,
     };
   },
   computed: {
@@ -73,16 +79,13 @@ export default {
     siteMapNumber() {
       return this.formData.siteMap;
     },
-    // Should the previous catalogue item button be enabled
+    // Should the "previous catalogue item" button be enabled
     previousCiValid() {
-      return this.selectedCatalogueItem > 1 ? true : false;
+      return this.selectedCiForm > 1;
     },
-    nextCiText() {
-      if(this.selectedCatalogueItem == this.catalogueItems.length) {
-        return "New item";
-      } else {
-        return "Next";
-      }
+    // Should the "next catalogue item" be enabled
+    nextCiValid() {
+      return this.selectedCiForm < this.ciForms;
     }
   },
   watch: {
@@ -99,14 +102,25 @@ export default {
     onCiSave(item) {
       this.formData.items.push(item);
     },
+    onCiClear(id) {
+      this.formData.items.forEach((item, index) => {
+        console.log({item, index, id});
+        if(item.id == id) {
+          this.formData.items.splice(index, 1);
+        }
+      });
+    },
+    onNewCi() {
+      this.ciForms++;
+      this.selectedCiForm = this.ciForms;
+    },
     onNextCi() {
-      if(this.selectedCatalogueItem == this.catalogueItems.length) {
-        this.catalogueItems.push(this.selectedCatalogueItem + 1);
-      }
-      this.selectedCatalogueItem++;
+      this.selectedCiForm++;
     },
     onPrevCi() {
-      this.selectedCatalogueItem--;
+      if(this.selectedCiForm > 1) {
+        this.selectedCiForm--;
+      }
     },
     async onSubmit() {
       this.message = "Submitting...";
