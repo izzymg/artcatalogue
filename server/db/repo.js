@@ -5,13 +5,15 @@ const stream = require("stream");
 const config = require("../config");
 
 const allFields = `
-  submission_id AS submissionId,
+  uid,
   first_name AS firstName,
   last_name AS lastName,
+  entries.title AS entryTitle,
   section AS section,
-  title AS title,
-  site_map AS siteMap
-`
+  site_map AS siteMap,
+  items.title AS itemTitle,
+  items.value AS itemValue
+`;
 
 // Start database connection
 
@@ -26,28 +28,47 @@ const db = mysql.createPool(url);
 /**
  * Inserts a new ArtSite form into the database. Returns its unique ID. 
 */
-async function insertForm({ firstName, lastName, title, section, siteMap }) {
-  const submissionId = uuid();
-  await db.query({
-    sql: `INSERT INTO entries SET
-            submission_id = ?,
-            first_name = ?,
-            last_name = ?,
-            section = ?,
-            title = ?,
-            site_map = ?`,
-    values: [submissionId, firstName, lastName, section, title, siteMap,],
-  });
-  return submissionId;
+async function insertForm({ firstName, lastName, title, section, siteMap, items }) {
+  const uid = uuid();
+  const conn = await db.getConnection();
+  try {
+    await conn.query("START TRANSACTION");
+    await conn.query({
+      sql: `INSERT INTO entries SET
+              uid = ?,
+              first_name = ?,
+              last_name = ?,
+              section = ?,
+              title = ?,
+              site_map = ?`,
+      values: [uid, firstName, lastName, section, title, siteMap,],
+    });
+    items.forEach(async(item) => {
+      await conn.query({
+        sql: `INSERT INTO items SET
+                entry_uid = ?,
+                title = ?,
+                value = ?`,
+        values: [uid, item.title, item.value],
+      });
+    });
+    await conn.query("COMMIT");
+  } catch(error) {
+    await conn.query("ROLLBACK");
+    throw error;
+  } finally {
+    await conn.release();
+  }
+  return uid;
 }
 
 /**
  * Fetches a form by its unique ID and returns all fields.
 */
-async function getForm(submissionId) {
+async function getForm(uid) {
   const [res] = await db.execute({
-    sql: `SELECT ${allFields} FROM entries WHERE submission_id = ?`,
-    values: [submissionId],
+    sql: `SELECT ${allFields} FROM entries WHERE uid = ?`,
+    values: [uid],
   });
   return res[0];
 }
@@ -57,7 +78,7 @@ async function getForm(submissionId) {
 */
 async function getCsv() {
   const [res] = await db.execute({
-    sql: `SELECT ${allFields} FROM entries`
+    sql: `SELECT ${allFields} FROM items LEFT JOIN entries ON entries.uid = items.entry_uid`
   });
 
   const rstr = new stream.Readable;
@@ -65,21 +86,25 @@ async function getCsv() {
 
   const csv = [];
   csv.push([
-    "Submission ID",
+    "Entry ID",
+    "Entry Title",
     "First Name",
     "Last Name",
     "Section",
-    "Title",
     "Site MAP Number",
+    "Item title",
+    "Item value"
   ].join(","));
   res.forEach((data) => {
     const csvRow = [
-      `"${data.submissionId}"`,
+      `"${data.uid}"`,
+      `"${data.entryTitle}"`,
       `"${data.firstName}"`,
       `"${data.lastName}"`,
       `"${data.section}"`,
-      `"${data.title}"`,
-      `"${data.siteMap}"`
+      `"${data.siteMap}"`,
+      `"${data.itemTitle}"`,
+      `"$${data.itemValue ? data.itemValue / 100 : 0}"`,
     ];
     csv.push(csvRow.join(","));
   });

@@ -12,7 +12,7 @@ const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Ceramic
  * Takes user inputted form data and validates all fields.
  * @returns An array of human readable errors.
 */
-function validateForm({ firstName, lastName, title, section, siteMap }) {
+function validateForm({ firstName, lastName, title, section, siteMap, items }) {
   const errors = [];
 
   if(firstName && lastName) {
@@ -34,6 +34,18 @@ function validateForm({ firstName, lastName, title, section, siteMap }) {
   const siteMapInt = parseInt(siteMap);
   if(!siteMapInt || siteMapInt > 100 || siteMapInt < 1) {
     errors.push("Site MAP number must be from 1 to 100");
+  }
+
+  if(!items.length || items.length < 1) {
+    errors.push("You must add at least one catalogue item.");
+  } else {
+    items.forEach((item, i) => {
+      const val = parseInt(item.value, 10);
+      if(isNaN(val) || val > (1000000 * 100) || val < 0) {
+        // i is zero indexed
+        errors.push(`Item ${i + 1} has an invalid price - must be between $0 and $1m`);
+      }
+    });
   }
 
   return errors;
