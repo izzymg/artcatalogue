@@ -4,7 +4,7 @@ Art form upload
 
 # Prerequisites
 
-* *NodeJS v10+, npm
+* NodeJS v10+, npm
 
 # Client
 
