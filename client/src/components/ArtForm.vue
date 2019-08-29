@@ -24,12 +24,23 @@
       <label> Add a Catalogue Item </label>
       <div class="catalogue-items-wrapper">
         <ul class="catalogue-item-list">
-          <li @click.stop="selectedCiForm = i" :class="{ selected: i == selectedCiForm }" v-for="i in ciForms" :key="i">Item {{ i }}</li>
+          <li
+            v-for="i in ciForms"
+            :key="i.id"
+            @click.stop="selectedCiForm = i.id"
+            :class="{ selected: i.id == selectedCiForm }"
+          > Item {{ i.id }}
+          </li>
         </ul>
-        <CatalogueItem v-for="i in ciForms" :id="i" :key="i" :hidden="selectedCiForm !== i"></CatalogueItem>
+        <CatalogueItem
+          v-for="i in ciForms"
+          :key="i.id"
+          :id="i.id"
+          :hidden="selectedCiForm !== i.id"
+        >
+        </CatalogueItem>
       </div>
-      <input type="submit" @click.stop.prevent="ciForms++" class="add-item-btn" value="Add item">
-      <label class="little-label"> Tip: Items with no title will not be submitted </label>
+      <input type="submit" @click.stop.prevent="addCiForm" class="add-item-btn" value="Add item">
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
@@ -57,7 +68,6 @@ export default {
         section: "PHEA",
         siteMap: 1,
       },
-      ciForms: 1,
       selectedCiForm: 1,
     };
   },
@@ -66,6 +76,9 @@ export default {
     siteMapNumber() {
       return this.formData.siteMap;
     },
+    ciForms() {
+      return this.$store.getters.catalogueItems;
+    }
   },
   watch: {
     siteMapNumber(newValue) {
@@ -78,17 +91,8 @@ export default {
     },
   },
   methods: {
-    onNewCi() {
-      this.ciForms++;
-      this.selectedCiForm = this.ciForms;
-    },
-    onNextCi() {
-      this.selectedCiForm++;
-    },
-    onPrevCi() {
-      if(this.selectedCiForm > 1) {
-        this.selectedCiForm--;
-      }
+    addCiForm() {
+      this.$store.commit("add");
     },
     async onSubmit() {
       this.message = "Submitting...";
@@ -155,19 +159,21 @@ export default {
     flex-basis: 400px;
 
     .catalogue-item-list {
-      padding: 0 35px;
-      max-height: 180px;
-      min-width: 100px;
+      min-height: 220px;
+      max-height: 220px;
       overflow-y: auto;
-      font-size: 0.9em;
+      font-size: 0.8em;
+      list-style: none;
       li {
-        color: rgb(62, 120, 156);
-        text-decoration: underline;
+        padding: 10px 45px;
+        background: hsl(0, 0%, 96%);
         cursor: pointer;
         &.selected {
-          cursor: unset;
-          text-decoration: none;
-          color: unset;
+          background: hsl(204, 48%, 69%);
+          color: #fff;
+        }
+        &:hover:not(.selected) {
+          background: hsl(0, 0%, 75%);
         }
       }
     }

@@ -6,11 +6,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     catalogueItems: [
+      {
+        title: null,
+        value: 0,
+        id: 1,
+      }
     ],
   },
   mutations: {
-    add(state, payload) {
-      state.catalogueItems.push(payload);
+    add(state) {
+      state.catalogueItems.push({
+        title: null,
+        value: 0,
+        id: state.catalogueItems.length + 1,
+      });
     },
     update(state, payload) {
       state.catalogueItems.forEach((item, index) => {
@@ -24,6 +33,9 @@ export default new Vuex.Store({
   getters: {
     catalogueItems: state => {
       return state.catalogueItems;
-    }
+    },
+    item: (state) => (id) => {
+      return state.catalogueItems.find(item => item.id == id);
+    },
   }
 })

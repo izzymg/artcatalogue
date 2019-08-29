@@ -38,13 +38,6 @@ export default {
       required: true,
     },
   },
-  created() {
-    this.$store.commit("add", {
-      id: this.id,
-      title: this.item.title,
-      value: this.item.value,
-    });
-  },
   methods: {
     updateState() {
       this.$store.commit("update", {
