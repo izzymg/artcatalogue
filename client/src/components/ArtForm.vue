@@ -70,7 +70,7 @@ export default {
   watch: {
     siteMapNumber(newValue) {
       if(newValue > 100) {
-        this.formData.siteMap = 100;
+        this.formData.siteMap = this.formData.siteMap.replace(/^./, '');
       }
       if(newValue < 1) {
         this.formData.siteMap = 1;
