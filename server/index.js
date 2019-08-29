@@ -6,7 +6,7 @@ const repo = require("./db/repo");
 const seed = require("./db/seed");
 
 const init = async function() {
-
+  console.log("Starting in ${process.env.NODE_ENV} mode");
   // Test database connection
   console.log("Testing database connection");
   const conn = await repo.db.getConnection();
@@ -39,7 +39,7 @@ const init = async function() {
   server.use(api.mount("/api"));
 
   // Attempt to listen
-  console.log(`Starting HTTP server on ${host}:${port} in ${process.env.NODE_ENV} mode`);
+  console.log(`Starting HTTP server on ${host}:${port}`);
   try {
     server.listen(port, host, () => {
 
