@@ -1,9 +1,10 @@
 <template>
   <div class="catalogue-item">
     <transition name="fade">
-      <form v-if="!saved" class="catalogue-item-form">
+      <form class="catalogue-item-form">
+        <label class="title-desc"> Title </label>
         <div class="title-wrapper">
-          <input type="text" required v-model="item.title" placeholder="Title">
+          <input type="text" required v-model="item.title" :placeholder="itemPlaceholder">
         </div>
         <label class="pricing-desc"> Pricing is optional </label>
         <div class="dollars-wrapper">
@@ -16,10 +17,6 @@
         </div>
       </form>
     </transition>
-    <div class="save-wrapper">
-      <input :disabled="saved" @click.stop.prevent="onSave" type="submit" :value="saveText">
-      <input :disabled="!saved" @click.stop.prevent="onClear" type="submit" value="Clear">
-    </div>
 </div>
 </template>
 
@@ -28,7 +25,6 @@ export default {
   name: "CatalogueItem",
   data() {
     return {
-      saved: false,
       item: {
         title: null,
         dollars: 0,
@@ -40,11 +36,11 @@ export default {
     id: {
       type: Number,
       required: true,
-    }
+    },
   },
   computed: {
-    saveText() {
-      return this.saved ? "Saved" : "Save";
+    itemPlaceholder() {
+      return `Item ${this.id}`;
     },
     dollars() {
       return this.item.dollars;
@@ -75,29 +71,6 @@ export default {
       }
     }
   },
-  methods: {
-    onSave() {
-      if(this.saved) {
-        return;
-      }
-      this.saved = true;
-      this.$emit("save", {
-        id: this.id,
-        title: this.item.title,
-        value: this.value,
-      });
-    },
-    onClear() {
-      if(!this.saved) {
-        return;
-      }
-      this.saved = false;
-      this.$emit("clear", this.id);
-      this.item.title = null;
-      this.item.dollars = 0;
-      this.item.cents = 0;
-    }
-  }
 };
 </script>
 
@@ -105,7 +78,6 @@ export default {
 
   .catalogue-item {
     padding: 5px;
-    width: 50%;
 
     .save-wrapper {
       margin: 10px 0;
@@ -114,10 +86,9 @@ export default {
       }
     }
 
-    .pricing-desc {
+    .pricing-desc, .title-desc {
       font-size: 0.8em;
       margin: 5px 10px;
-      font-style: italic;
     }
 
     .title-wrapper {

@@ -21,31 +21,15 @@
         </select>
         <label class="little-label"> Section </label>
       </div>
+      <label> Add a Catalogue Item </label>
       <div class="catalogue-items-wrapper">
-        <label> Add a Catalogue Item (<span @click="hideHelp = !hideHelp" class="link">{{ hideHelp ? "X" : "?" }}</span>) </label>
-        <transition name="fade">
-          <p v-if="hideHelp" class="help">
-            Fill out your first catalogue item, then save click "Save" when finished.
-            You can click "New Item" to add another catalogue item, and cycle between those you've created.
-            If you want to delete a saved item, click "clear" to reset it.
-          </p>
-        </transition>
-        <transition-group name="fade">
-          <CatalogueItem
-            @save="onCiSave" @clear="onCiClear"
-            :hidden="ci != selectedCiForm" v-for="ci in ciForms"
-            :id="ci" :key="ci"
-          >
-          </CatalogueItem>
-        </transition-group>
+        <ul class="catalogue-item-list">
+          <li @click.stop="selectedCiForm = i" :class="{ selected: i == selectedCiForm }" v-for="i in ciForms" :key="i">Item {{ i }}</li>
+        </ul>
+        <CatalogueItem v-for="i in ciForms" :id="i" :key="i" :hidden="selectedCiForm !== i"></CatalogueItem>
       </div>
-      <hr>
-      <div class="catalogue-items-control-wrapper">
-        <input :disabled="!previousCiValid" @click="onPrevCi" type="button" value="Prev">
-        <span class="selected-ci-text"> Item {{ selectedCiForm }} </span>
-        <input v-if="nextCiValid" @click="onNextCi" type="button" value="Next">
-        <input v-else @click="onNewCi" type="button" value="New Item">
-      </div>
+      <input type="submit" @click.stop.prevent="ciForms++" class="add-item-btn" value="Add item">
+      <label class="little-label"> Tip: Empty items will not be submitted </label>
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
@@ -74,7 +58,6 @@ export default {
         siteMap: 1,
         items: [],
       },
-      hideHelp: true,
       ciForms: 1,
       selectedCiForm: 1,
     };
@@ -84,14 +67,6 @@ export default {
     siteMapNumber() {
       return this.formData.siteMap;
     },
-    // Should the "previous catalogue item" button be enabled
-    previousCiValid() {
-      return this.selectedCiForm > 1;
-    },
-    // Should the "next catalogue item" be enabled
-    nextCiValid() {
-      return this.selectedCiForm < this.ciForms;
-    }
   },
   watch: {
     siteMapNumber(newValue) {
@@ -104,17 +79,6 @@ export default {
     },
   },
   methods: {
-    onCiSave(item) {
-      this.formData.items.push(item);
-    },
-    onCiClear(id) {
-      this.formData.items.forEach((item, index) => {
-        console.log({item, index, id});
-        if(item.id == id) {
-          this.formData.items.splice(index, 1);
-        }
-      });
-    },
     onNewCi() {
       this.ciForms++;
       this.selectedCiForm = this.ciForms;
@@ -151,12 +115,6 @@ export default {
 .art-form {
   margin-left: 9px;
 
-  .help {
-    font-size: 0.9em;
-    word-wrap: break-word;
-    max-width: 600px;
-  }
-
   .page-message {
     font-size: 0.7em;
     margin: 0;
@@ -183,6 +141,32 @@ export default {
 
   .catalogue-items-wrapper {
     margin-top: 30px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 400px;
+
+    .catalogue-item-list {
+      padding: 0 35px;
+      max-height: 180px;
+      min-width: 100px;
+      overflow-y: auto;
+      font-size: 0.9em;
+      li {
+        color: rgb(62, 120, 156);
+        text-decoration: underline;
+        cursor: pointer;
+        &.selected {
+          cursor: unset;
+          text-decoration: none;
+          color: unset;
+        }
+      }
+    }
+    
+    .catalogue-item {
+      margin: 0 20px;
+    }
   }
 
   .submit-wrapper input {
