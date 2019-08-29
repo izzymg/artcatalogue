@@ -29,7 +29,7 @@
         <CatalogueItem v-for="i in ciForms" :id="i" :key="i" :hidden="selectedCiForm !== i"></CatalogueItem>
       </div>
       <input type="submit" @click.stop.prevent="ciForms++" class="add-item-btn" value="Add item">
-      <label class="little-label"> Tip: Empty items will not be submitted </label>
+      <label class="little-label"> Tip: Items with no title will not be submitted </label>
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
@@ -56,7 +56,6 @@ export default {
         title: null,
         section: "PHEA",
         siteMap: 1,
-        items: [],
       },
       ciForms: 1,
       selectedCiForm: 1,
@@ -94,16 +93,26 @@ export default {
     async onSubmit() {
       this.message = "Submitting...";
       try {
-        const res = await repo.submitForm(this.formData);
+        const catalogueItems = this.$store.getters.catalogueItems;
+
+        // Mix in items with rest of form data and submit
+        const res = await repo.submitForm({
+          ...this.formData,
+          items: catalogueItems,
+        });
         this.message = res.data.message;
+
       } catch(error) {
+
         console.log({error});
+
         // If there was a message sent with the server response, display it
         if(error.response && error.response.data) {
           this.message = error.response.data;
           return;
         }
-        this.message = "Unknown error";
+
+        this.message = "Unknown error (server may be down)";
       }
     }
   }
@@ -140,7 +149,6 @@ export default {
   }
 
   .catalogue-items-wrapper {
-    margin-top: 30px;
     display: flex;
     flex-grow: 1;
     flex-shrink: 0;

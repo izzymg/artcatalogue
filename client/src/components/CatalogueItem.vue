@@ -4,7 +4,7 @@
       <form class="catalogue-item-form">
         <label class="title-desc"> Title </label>
         <div class="title-wrapper">
-          <input type="text" required v-model="item.title" :placeholder="itemPlaceholder">
+          <input type="text" required v-model="item.title" :placeholder="itemPlaceholder" @input="updateState">
         </div>
         <label class="pricing-desc"> Pricing is optional </label>
         <div class="dollars-wrapper">
@@ -38,6 +38,22 @@ export default {
       required: true,
     },
   },
+  created() {
+    this.$store.commit("add", {
+      id: this.id,
+      title: this.item.title,
+      value: this.item.value,
+    });
+  },
+  methods: {
+    updateState() {
+      this.$store.commit("update", {
+        id: this.id,
+        title: this.item.title,
+        value: this.value,
+      });
+    }
+  },
   computed: {
     itemPlaceholder() {
       return `Item ${this.id}`;
@@ -69,6 +85,10 @@ export default {
         this.item.dollars++;
         this.item.cents = 0;
       }
+    },
+    value() {
+      // Update state on value change, not on dollar/cent change
+      this.updateState();
     }
   },
 };
