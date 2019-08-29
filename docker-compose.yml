@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+    maria:
+        container_name: "artsite_mariadb"
+        image: "mariadb:bionic"
+        env_file: ./.env
+        volumes:
+            - /data/artsite_mariadb:/var/lib/mysql
+        restart: always
+    artsite:
+        container_name: "artsite"
+        build: ./server
+        depends_on:
+            - maria
+        ports:
+            - 3000:3000
+        env_file: ./.env
