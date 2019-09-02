@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    catalogueItems: [
+    items: [
       {
         title: null,
         value: 0,
@@ -15,27 +15,27 @@ export default new Vuex.Store({
   },
   mutations: {
     add(state) {
-      state.catalogueItems.push({
+      state.items.push({
         title: null,
         value: 0,
-        id: state.catalogueItems.length + 1,
+        id: state.items.length + 1,
       });
     },
     update(state, payload) {
-      state.catalogueItems.forEach((item, index) => {
+      state.items.forEach((item, index) => {
         if(item.id == payload.id) {
           // Replace item's ID with new payload data.
-          state.catalogueItems[index] = payload;
+          state.items[index] = payload;
         }
       });
     }
   },
   getters: {
-    catalogueItems: state => {
-      return state.catalogueItems;
+    items: state => {
+      return state.items;
     },
     item: (state) => (id) => {
-      return state.catalogueItems.find(item => item.id == id);
+      return state.items.find(item => item.id == id);
     },
   }
 })

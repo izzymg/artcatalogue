@@ -25,22 +25,20 @@
       <div class="catalogue-items-wrapper">
         <ul class="catalogue-item-list">
           <li
-            v-for="i in ciForms"
-            :key="i.id"
-            @click.stop="selectedCiForm = i.id"
-            :class="{ selected: i.id == selectedCiForm }"
-          > Item {{ i.id }}
-          </li>
+            v-for="item in items"
+            :key="item.id"
+            @click.stop="selectedItem = item.id"
+            :class="{ selected: item.id == selectedItem }"> Item {{ item.id }} </li>
         </ul>
         <CatalogueItem
-          v-for="i in ciForms"
-          :key="i.id"
-          :id="i.id"
-          :hidden="selectedCiForm !== i.id"
+          v-for="item in items"
+          :key="item.id"
+          :id="item.id"
+          :hidden="selectedItem !== item.id"
         >
         </CatalogueItem>
       </div>
-      <input type="submit" @click.stop.prevent="addCiForm" class="add-item-btn" value="Add item">
+      <input type="submit" @click.stop.prevent="addItem" class="add-item-btn" value="Add item">
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
@@ -68,7 +66,7 @@ export default {
         section: "PHEA",
         siteMap: 1,
       },
-      selectedCiForm: 1,
+      selectedItem: 1,
     };
   },
   computed: {
@@ -76,8 +74,8 @@ export default {
     siteMapNumber() {
       return this.formData.siteMap;
     },
-    ciForms() {
-      return this.$store.getters.catalogueItems;
+    items() {
+      return this.$store.getters.items;
     }
   },
   watch: {
@@ -91,18 +89,18 @@ export default {
     },
   },
   methods: {
-    addCiForm() {
+    addItem() {
       this.$store.commit("add");
     },
     async onSubmit() {
       this.message = "Submitting...";
       try {
-        const catalogueItems = this.$store.getters.catalogueItems;
+        const items = this.$store.getters.items;
 
         // Mix in items with rest of form data and submit
         const res = await repo.submitForm({
           ...this.formData,
-          items: catalogueItems,
+          items: items,
         });
         this.message = res.data.message;
 
@@ -134,10 +132,6 @@ export default {
     text-align: center;
   }
 
-  .selected-ci-text {
-    font-size: 0.8em;
-  }
-
   input, select {
     margin-left: 10px;
     margin-right: 10px;
@@ -165,7 +159,7 @@ export default {
       font-size: 0.8em;
       list-style: none;
       li {
-        padding: 10px 45px;
+        padding: 10px 20px;
         background: hsl(0, 0%, 96%);
         cursor: pointer;
         &.selected {

@@ -2,11 +2,18 @@
   <div class="catalogue-item">
     <transition name="fade">
       <form class="catalogue-item-form">
-        <label class="title-desc"> Title </label>
+        <label class="desc"> Title </label>
         <div class="title-wrapper">
           <input type="text" required v-model="item.title" :placeholder="itemPlaceholder" @input="updateState">
         </div>
-        <label class="pricing-desc"> Pricing is optional </label>
+        <label class="desc"> Medium </label>
+        <div class="medium-wrapper">
+          <select required v-model="item.medium" @change="updateState">
+            <option value="Performance">Performance</option>
+            <option value="Digital file">Digital file</option>
+          </select>
+        </div>
+        <label class="desc"> Pricing is optional </label>
         <div class="dollars-wrapper">
           <input v-model="item.dollars" type="number" placeholder="Dollars">
           <label class="little-label">$ Dollars</label>
@@ -27,6 +34,7 @@ export default {
     return {
       item: {
         title: null,
+        medium: "Performance",
         dollars: 0,
         cents: 0,
       },
@@ -43,6 +51,7 @@ export default {
       this.$store.commit("update", {
         id: this.id,
         title: this.item.title,
+        medium: this.item.medium,
         value: this.value,
       });
     }
@@ -99,7 +108,7 @@ export default {
       }
     }
 
-    .pricing-desc, .title-desc {
+    .desc {
       font-size: 0.8em;
       margin: 5px 10px;
     }

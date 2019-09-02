@@ -14,6 +14,7 @@ module.exports = [
   `CREATE TABLE IF NOT EXISTS items (
     entry_uid         varchar(36) NOT NULL,
     title             text DEFAULT null,
+    medium            text NOT null,
     value             bigint NOT NULL,
     CONSTRAINT fk_item_entry
       FOREIGN KEY (entry_uid) REFERENCES entries (uid)
