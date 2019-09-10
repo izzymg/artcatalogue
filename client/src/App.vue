@@ -1,24 +1,11 @@
 <template>
   <div id="app">
     <div class="nav-bar">
-      <h3 class="page-title"> Otago Polytechnic </h3>
-      <p class="page-desc">
-        Please fill out your details below for the art catalogue.
-      </p>
+      <h3 class="page-title"> Otago Polytechnic - Art Catalogue </h3>
     </div>
-    <ArtForm/>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import ArtForm from "./components/ArtForm";
-export default {
-  name: "app",
-  components: {
-    ArtForm,
-  }
-}
-</script>
 
 <style lang="scss">
 
@@ -45,6 +32,7 @@ body {
   .page-title {
     margin: 0;
     font-size: 1.8em;
+    font-weight: bold;
   }
 }
 

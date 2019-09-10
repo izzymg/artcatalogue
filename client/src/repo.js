@@ -9,5 +9,8 @@ const repo = axios.create({
 export default {
   async submitForm(obj) {
     return repo.post("/", obj);
-  }
+  },
+  async getEntries() {
+    return repo.get("/entries");
+  },
 };

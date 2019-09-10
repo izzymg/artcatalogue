@@ -7,6 +7,7 @@ const router = new Router({
 });
 
 const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Ceramics", "Printmakings"];
+const mediums = ["Performance", "Digital file"];
 
 /**
  * Takes user inputted form data and validates all fields.
@@ -45,18 +46,20 @@ function validateForm({ firstName, lastName, title, section, siteMap, items }) {
         // i is zero indexed
         errors.push(`Item ${i + 1} has an invalid price - must be between $0 and $1m`);
       }
+      if(mediums.indexOf(item.medium) == -1) {
+        errors.push(`Item ${i + 1} has an invalid medium`);
+      }
     });
   }
 
   return errors;
 }
 
-// CSV GET handler
+// Entries GET handler
 router.get(
-  "/entries.csv",
+  "/entries",
   async function(ctx) {
-    ctx.set("Content-Type", "text/csv");
-    ctx.body = await repo.getCsv();
+    ctx.body = await repo.getEntries();
   }
 )
 
