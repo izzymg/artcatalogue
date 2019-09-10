@@ -13,4 +13,7 @@ export default {
   async getEntries() {
     return repo.get("/entries");
   },
+  async getEntry(uid) {
+    return repo.get(`/entries/${uid}`);
+  },
 };

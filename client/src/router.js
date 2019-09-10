@@ -17,8 +17,15 @@ export default new Router({
       path: "/entries",
       name: "Entries",
       component: function () { 
-        return import(/* webpackChunkName: "about" */ "./views/Entries.vue")
+        return import(/* webpackChunkName: "entries" */ "./views/Entries.vue")
       }
-    }
+    },
+    {
+      path: "/entries/:uid",
+      name: "Entry",
+      component: function () { 
+        return import(/* webpackChunkName: "entry" */ "./views/Entry.vue")
+      }
+    },
   ]
 })
