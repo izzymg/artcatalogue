@@ -73,36 +73,24 @@ const getEntries = async function() {
   return res;
 }
 
-const getEntry = async function() {
+const getEntry = async function(uid) {
   const [results] = await db.execute({
-    sql: `SELECT ${entryFields}, ${itemFields} FROM entries LEFT JOIN items ON items.entry_uid = entries.uid`,
+    sql: `SELECT ${entryFields}, ${itemFields} FROM entries
+      LEFT JOIN items ON items.entry_uid = entries.uid WHERE entries.uid = ?`,
+    values: [uid],
     nestTables: true,
   });
 
-  // Filter out duplicates from left join and nest flat relationship into their data
   if(results && results.length > 0) {
-    // res.entries | res.items
-    let nested = [];
-    results.forEach((res) => {
-      const lastItem = nested[nested.length - 1];
-      if(lastItem && lastItem.uid == res.entries.uid) {
-        // Push item data onto the entry
-        if(lastItem.items) {
-          lastItem.items.push(res.items);
-        } else {
-          lastItem.items = [res.items];
-        }
-      } else {
-        // Create a new flat entry
-        const obj = { ...res.entries };
-        obj.items = [res.items];
-        nested.push(obj);
-      }
+    // Flatten SQL duplicates into nest
+    const obj = results[0].entries;
+    obj.items = [];
+    results.forEach(res => {
+      obj.items.push(res.items);
     });
-    return nested;
-  } else {
-    return null;
+    return obj;
   }
+  return null;
 }
 
 module.exports = {
