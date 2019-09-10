@@ -7,9 +7,15 @@ const entryFields = `
   uid,
   first_name AS firstName,
   last_name AS lastName,
-  title AS title,
+  entries.title AS title,
   section AS section,
   site_map AS siteMap
+`;
+
+const itemFields = `
+  items.medium as medium,
+  items.title as itemTitle,
+  items.value as value
 `;
 
 // Start database connection
@@ -67,8 +73,41 @@ const getEntries = async function() {
   return res;
 }
 
+const getEntry = async function() {
+  const [results] = await db.execute({
+    sql: `SELECT ${entryFields}, ${itemFields} FROM entries LEFT JOIN items ON items.entry_uid = entries.uid`,
+    nestTables: true,
+  });
+
+  // Filter out duplicates from left join and nest flat relationship into their data
+  if(results && results.length > 0) {
+    // res.entries | res.items
+    let nested = [];
+    results.forEach((res) => {
+      const lastItem = nested[nested.length - 1];
+      if(lastItem && lastItem.uid == res.entries.uid) {
+        // Push item data onto the entry
+        if(lastItem.items) {
+          lastItem.items.push(res.items);
+        } else {
+          lastItem.items = [res.items];
+        }
+      } else {
+        // Create a new flat entry
+        const obj = { ...res.entries };
+        obj.items = [res.items];
+        nested.push(obj);
+      }
+    });
+    return nested;
+  } else {
+    return null;
+  }
+}
+
 module.exports = {
   db,
   insertForm,
   getEntries,
+  getEntry,
 };

@@ -65,15 +65,11 @@ router.get(
 
 // Form GET handler
 router.get(
-  "/forms/:id",
+  "/entries/:id",
   async function(ctx) {
-    const formId = ctx.params.id;
-    const formData = await repo.getForm(formId);
-    ctx.assert(formData, 404, "No form found by that ID");
-    ctx.body = {
-      message: "Success",
-      formData,
-    };
+    const entry = await repo.getEntry(ctx.params.id);
+    ctx.assert(entry, 404, "No entry found by that UID");
+    ctx.body = entry;
   }
 )
 

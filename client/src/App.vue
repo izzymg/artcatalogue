@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div class="nav-bar">
-      <h3 class="page-title"> Otago Polytechnic - Art Catalogue </h3>
     </div>
     <router-view/>
   </div>
@@ -29,11 +28,7 @@ body {
 
 .nav-bar {
   padding: 10px;
-  .page-title {
-    margin: 0;
-    font-size: 1.8em;
-    font-weight: bold;
-  }
+
 }
 
 .fade-enter-active, .fade-leave-active {

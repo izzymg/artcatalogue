@@ -1,5 +1,9 @@
 <template>
   <div class="art-form">
+    <h1> Otago Polytechnic </h1>
+    <span class="page-info">
+      Fill out this form to add your art to the catalogue.
+    </span>
     <form autocomplete="off" class="art-form-form">
       <div class="details-wrapper">
         <label> Entry information </label>
@@ -21,7 +25,7 @@
         </select>
         <label class="little-label"> Section </label>
       </div>
-      <label> Add a Catalogue Item </label>
+      <label> Add catalogue items </label>
       <div class="catalogue-items-wrapper">
         <ul class="catalogue-item-list">
           <li
@@ -125,6 +129,10 @@ export default {
 
 .art-form {
   margin-left: 9px;
+
+  .page-info {
+    font-size: 0.8em;
+  }
 
   .page-message {
     font-size: 0.7em;
