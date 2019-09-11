@@ -28,6 +28,33 @@ console.log("Establishing database connection");
 */
 const db = mysql.createPool(url);
 
+// Add IP
+const insertIp = async function (ip) {
+  return await db.execute({
+    sql: "INSERT INTO ips SET ip = ?",
+    values: [ip],
+  });
+}
+
+// Check for an IP's existence
+const getIp = async function(ip) {
+  const [res] = await db.execute({
+    sql: "SELECT created FROM ips WHERE ip = ?",
+    values: [ip],
+  });
+  if(res && res.length > 0) {
+    return res[0];
+  }
+  return null;
+}
+
+// Purge IPs over an hour old
+const cleanIps = async function() {
+  return await db.execute({
+    sql: "DELETE FROM ips WHERE created < DATE_ADD(NOW(), INTERVAL -1 HOUR)",
+  });
+}
+
 /**
  * Inserts a new ArtSite form into the database. Returns its unique ID. 
 */
@@ -98,4 +125,7 @@ module.exports = {
   insertForm,
   getEntries,
   getEntry,
+  cleanIps,
+  getIp,
+  insertIp,
 };

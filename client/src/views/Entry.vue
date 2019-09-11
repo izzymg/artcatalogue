@@ -27,7 +27,7 @@
             <tr v-for="(item, key) in entry.items" :key="key">
               <td> {{ item.itemTitle || "Untitled item" }} </td>
               <td> {{ item.medium }} </td>
-              <td> {{ item.value / 10 }} </td>
+              <td> ${{ item.value / 100 }} </td>
             </tr>
           </tbody>
         </table>

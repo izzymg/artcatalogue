@@ -22,9 +22,18 @@ const init = async function() {
     }
   }
 
+  // Clean IPS
+  setTimeout(async() => {
+    console.log("Clearing IPs table");
+    await repo.cleanIps();
+  }, 60 * 60 * 1000)
+
   // HTTP server setup
   const { host, port, corsOrigin } = config.server;
   const server = new Koa();
+
+  // X-Forwarded-For support
+  server.proxy = true;
 
   // Allow cross-origin
   server.use(

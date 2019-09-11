@@ -9,8 +9,7 @@
         <label class="desc"> Medium </label>
         <div class="medium-wrapper">
           <select required v-model="item.medium" @change="updateState">
-            <option value="Performance">Performance</option>
-            <option value="Digital file">Digital file</option>
+            <option v-for="medium in mediums" :key="medium" :value="medium"> {{ medium }} </option>
           </select>
         </div>
         <label class="desc"> Pricing is optional </label>
@@ -34,7 +33,7 @@ export default {
     return {
       item: {
         title: null,
-        medium: "Performance",
+        medium: this.mediums[0],
         dollars: 0,
         cents: 0,
       },
@@ -43,6 +42,10 @@ export default {
   props: {
     id: {
       type: Number,
+      required: true,
+    },
+    mediums: {
+      type: Array,
       required: true,
     },
   },

@@ -19,6 +19,11 @@ module.exports = [
     CONSTRAINT fk_item_entry
       FOREIGN KEY (entry_uid) REFERENCES entries (uid)
       ON DELETE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
+
+  `CREATE TABLE IF NOT EXISTS ips (
+    ip                text NOT NULL,
+    created           datetime NOT NULL DEFAULT NOW()
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8`
   
 ];

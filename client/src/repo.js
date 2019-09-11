@@ -7,8 +7,11 @@ const repo = axios.create({
 });
 
 export default {
+  async getInfo() {
+    return repo.get("/");
+  },
   async submitForm(obj) {
-    return repo.post("/", obj);
+    return repo.post("/entries", obj);
   },
   async getEntries() {
     return repo.get("/entries");

@@ -68,7 +68,11 @@ export default {
       try {
         const res = await repo.getEntries();
         this.entries = res.data;
-        this.message = "Choose an entry to view.";
+        if(!this.entries || this.entries.length < 1) {
+          this.message = "No entries yet.";
+        } else {
+          this.message = "Choose an entry to view.";
+        }
       } catch(error) {
         this.message = "Failed to load entries, server may be down.";
       }

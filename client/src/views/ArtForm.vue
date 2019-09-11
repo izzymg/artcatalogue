@@ -4,6 +4,7 @@
     <span class="page-info">
       Fill out this form to add your art to the catalogue.
     </span>
+    <p class="page-message" v-html="message"></p>
     <form autocomplete="off" class="art-form-form">
       <div class="details-wrapper">
         <label> Entry information </label>
@@ -17,11 +18,7 @@
       </div>
       <div class="section-wrapper">
         <select class="section-select" v-model="formData.section">
-          <option value="PHEA">PHEA</option>
-          <option value="Jewellery/Textiles">Jewellery/Textiles</option>
-          <option value="Paintings">Paintings</option>
-          <option value="Sculptures/Ceramics">Sculptures/Ceramics</option>
-          <option value="Printmakings">Printmakings</option>
+          <option v-for="section in sections" :key="section" :value="section">{{ section }}</option>
         </select>
         <label class="little-label"> Section </label>
       </div>
@@ -39,6 +36,7 @@
           :key="item.id"
           :id="item.id"
           :hidden="selectedItem !== item.id"
+          :mediums="mediums"
         >
         </CatalogueItem>
       </div>
@@ -46,7 +44,6 @@
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
-        <p class="page-message" v-html="message"></p>
       </div>
     </form>
   </div>
@@ -63,15 +60,20 @@ export default {
   data() {
     return {
       message: null,
+      sections: [],
+      mediums: [],
       formData: {
         firstName: null,
         lastName: null,
         title: null,
-        section: "PHEA",
+        section: null,
         siteMap: 1,
       },
       selectedItem: 1,
     };
+  },
+  async created() {
+    await this.load();
   },
   computed: {
     // Caches site MAP number to watch changes on it 
@@ -96,6 +98,27 @@ export default {
     addItem() {
       this.$store.commit("add");
     },
+    onError(error) {
+      console.log({error});
+
+      // Display any errors that were received
+      if(error.response && error.response.data) {
+        this.message = error.response.data;
+        return;
+      }
+
+      this.message = "Unknown error (server may be down)";
+    },
+    async load() {
+      try {
+        const res = await repo.getInfo();
+        this.sections = res.data.sections;
+        this.mediums = res.data.mediums;
+        this.formData.section = this.sections[0];
+      } catch(error) {
+        this.onError(error);
+      }
+    },
     async onSubmit() {
       this.message = "Submitting...";
       try {
@@ -106,19 +129,11 @@ export default {
           ...this.formData,
           items: items,
         });
-        this.message = res.data.message;
+
+        this.message = `Success, your form is: <a href="entries/${res.data.uid}/">${res.data.uid}</a>`;
 
       } catch(error) {
-
-        console.log({error});
-
-        // If there was a message sent with the server response, display it
-        if(error.response && error.response.data) {
-          this.message = error.response.data;
-          return;
-        }
-
-        this.message = "Unknown error (server may be down)";
+        this.onError(error);
       }
     }
   }

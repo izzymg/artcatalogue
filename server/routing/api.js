@@ -7,7 +7,36 @@ const router = new Router({
 });
 
 const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Ceramics", "Printmakings"];
-const mediums = ["Performance", "Digital file"];
+const mediums = [
+  "Performance",
+  "Digital file",
+  "Digital inkjet print",
+  "Acrylic on board",
+  "Acrylic on canvas",
+  "Adapted found objects",
+  "Bronze",
+  "Ceramic",
+  "Digital c type print",
+  "Digital still",
+  "DVD",
+  "Earthenware",
+  "Etching",
+  "Fibre and board",
+  "Found objects",
+  "Fibre based gelatin silver print",
+  "Intaglio",
+  "Lithograph",
+  "Mixed media",
+  "Oil on board",
+  "Oil on canvas",
+  "Sound media",
+  "Screen print",
+  "Sterling silver",
+  "Stoneware",
+  "Woodblock",
+  "Woven dyed cotton",
+
+];
 
 /**
  * Takes user inputted form data and validates all fields.
@@ -75,8 +104,11 @@ router.get(
 
 // Form POST handler
 router.post(
-  "/",
+  "/entries",
   async function(ctx) {
+
+    const ip = await repo.getIp(ctx.ip);
+    ctx.assert(!ip, 400, "Please wait before you can do that again");
 
     const formData = await cobody.json(ctx, { strict: true, });
     const formErrors = validateForm(formData);
@@ -85,11 +117,20 @@ router.post(
       return;
     }
     
-    const formId = await repo.insertForm(formData);
+    const uid = await repo.insertForm(formData);
     ctx.body = {
-      message: `Success, your form ID is ${formId}`,
-      formId,
+      uid,
     };
+
+    await repo.insertIp(ctx.ip);
+  }
+);
+
+// General info
+router.get(
+  "/",
+  async function(ctx) {
+    ctx.body = { mediums, sections, }
   }
 );
 
