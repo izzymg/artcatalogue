@@ -5,7 +5,7 @@
     <input @click.stop.prevent="onChangeSortBySection" type="submit" class="sort-mode-button" :value="sortBySectionText">
     <ul class="entries-list">
       <li class="entry-li" v-for="entry in entries" :key="entry.uid">
-        <router-link title="entry.title" class="entry" :to="'entries/' + entry.uid">
+        <router-link title="entry.title" class="entry" :to="'/entries/' + entry.uid">
           <span class="entry-title">{{ entry.firstName }} {{ entry.lastName }}: <span class="bold">{{ cutoff(entry.title) || "Untitled" }}</span></span>
           <span class="entry-info"> {{ sortBySection ? entry.section : entry.siteMap }} </span>
         </router-link>
