@@ -10,12 +10,14 @@ export default new Vuex.Store({
         title: null,
         value: 0,
         id: 1,
+        medium: "Performance",
       }
     ],
   },
   mutations: {
     add(state) {
       state.items.push({
+        medium: "Performance",
         title: null,
         value: 0,
         id: state.items.length + 1,
