@@ -13,6 +13,7 @@ module.exports = [
 
   `CREATE TABLE IF NOT EXISTS items (
     entry_uid         varchar(36) NOT NULL,
+    id                text NOT NULL,
     title             text DEFAULT null,
     medium            text NOT null,
     value             bigint NOT NULL,

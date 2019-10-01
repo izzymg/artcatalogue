@@ -4,8 +4,6 @@ services:
         container_name: "artsite_mariadb"
         image: "mariadb:bionic"
         env_file: ./.env
-        volumes:
-            - /data/artsite_mariadb:/var/lib/mysql
         restart: always
     artsite:
         container_name: "artsite"

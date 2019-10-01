@@ -18,6 +18,7 @@
         <table class="items-table">
           <thead>
             <tr>
+              <th> ID </th>
               <th> Title </th>
               <th> Medium </th>
               <th> Price </th>
@@ -25,6 +26,7 @@
           </thead>
           <tbody>
             <tr v-for="(item, key) in entry.items" :key="key">
+              <td> {{ item.itemId }} </td>
               <td> {{ item.itemTitle || "Untitled item" }} </td>
               <td> {{ item.medium }} </td>
               <td> ${{ item.value / 100 }} </td>

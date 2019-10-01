@@ -15,6 +15,7 @@ const entryFields = `
 const itemFields = `
   items.medium as medium,
   items.title as itemTitle,
+  items.id as itemId,
   items.value as value
 `;
 
@@ -77,10 +78,11 @@ const insertForm = async function({ firstName, lastName, title, section, siteMap
       await conn.query({
         sql: `INSERT INTO items SET
                 entry_uid = ?,
+                id = ?,
                 title = ?,
                 value = ?,
                 medium = ?`,
-        values: [uid, item.title, item.value, item.medium],
+        values: [uid, item.id, item.title, item.value, item.medium],
       });
     });
     await conn.query("COMMIT");
