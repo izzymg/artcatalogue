@@ -40,7 +40,7 @@
         >
         </CatalogueItem>
       </div>
-      <input type="submit" @click.stop.prevent="addItem" class="add-item-btn" value="Add item">
+      <input type="submit" @click.stop.prevent="addItem" class="add-item-btn" value="Create another item">
       <hr>
       <div class="submit-wrapper">
         <input type="submit" value="Done and submit" @click.stop.prevent="onSubmit">
