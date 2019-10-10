@@ -11,6 +11,7 @@ export default new Vuex.Store({
         value: 0,
         id: 1,
         medium: "Performance",
+        dimensions: "20x20x20",
       }
     ],
   },
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         title: null,
         value: 0,
         id: state.items.length + 1,
+        dimensions: "20x20x20",
       });
     },
     update(state, payload) {

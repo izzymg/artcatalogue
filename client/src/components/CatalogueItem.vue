@@ -12,6 +12,11 @@
             <option v-for="medium in mediums" :key="medium" :value="medium"> {{ medium }} </option>
           </select>
         </div>
+        <label class="desc"> Dimensions are optional </label>
+        <div class="dimensions-wrapper">
+          <input v-model="item.dimensions" type="text" placeholder="Dimensions" value="20x20x20">
+          <label class="little-label"> (WxHxL) Centimetres </label>
+        </div>
         <label class="desc"> Pricing is optional </label>
         <div class="dollars-wrapper">
           <input v-model="item.dollars" type="number" placeholder="Dollars">
@@ -36,6 +41,7 @@ export default {
         medium: this.mediums[0],
         dollars: 0,
         cents: 0,
+        dimensions: "20x20x20"
       },
     };
   },
@@ -56,6 +62,7 @@ export default {
         title: this.item.title,
         medium: this.item.medium,
         value: this.value,
+        dimensions: this.item.dimensions,
       });
     }
   },

@@ -22,6 +22,7 @@
               <th> Title </th>
               <th> Medium </th>
               <th> Price </th>
+              <th> Dimensions </th>
             </tr>
           </thead>
           <tbody>
@@ -30,6 +31,7 @@
               <td> {{ item.itemTitle || "Untitled item" }} </td>
               <td> {{ item.medium }} </td>
               <td> ${{ item.value / 100 }} </td>
+              <td v-if="item.dimensions"> {{ item.dimensions }} </td>
             </tr>
           </tbody>
         </table>

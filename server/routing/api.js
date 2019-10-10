@@ -78,6 +78,9 @@ function validateForm({ firstName, lastName, title, section, siteMap, items }) {
       if(mediums.indexOf(item.medium) == -1) {
         errors.push(`Item ${i + 1} has an invalid medium`);
       }
+      if(item.dimensions && item.dimensions.length > 14) {
+        errors.push(`Item ${i + 1} has invalid dimensions`);
+      }
     });
   }
 
@@ -111,6 +114,7 @@ router.post(
     ctx.assert(!ip, 400, "Please wait before you can do that again");
 
     const formData = await cobody.json(ctx, { strict: true, });
+    console.log({ items: formData.items });
     const formErrors = validateForm(formData);
     if(formErrors.length > 0) {
       ctx.throw(400, formErrors[0]);

@@ -11,6 +11,7 @@ export default {
     return repo.get("/");
   },
   async submitForm(obj) {
+    console.log("Items:", { items: obj.items })
     return repo.post("/entries", obj);
   },
   async getEntries() {

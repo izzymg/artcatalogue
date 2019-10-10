@@ -16,7 +16,8 @@ const itemFields = `
   items.medium as medium,
   items.title as itemTitle,
   items.id as itemId,
-  items.value as value
+  items.value as value,
+  items.dimensions as dimensions
 `;
 
 // Start database connection
@@ -81,8 +82,9 @@ const insertForm = async function({ firstName, lastName, title, section, siteMap
                 id = ?,
                 title = ?,
                 value = ?,
-                medium = ?`,
-        values: [uid, item.id, item.title, item.value, item.medium],
+                medium = ?,
+                dimensions = ?`,
+        values: [uid, item.id, item.title, item.value, item.medium, item.dimensions],
       });
     });
     await conn.query("COMMIT");

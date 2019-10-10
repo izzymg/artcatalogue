@@ -123,7 +123,6 @@ export default {
       this.message = "Submitting...";
       try {
         const items = this.$store.getters.items;
-
         // Mix in items with rest of form data and submit
         const res = await repo.submitForm({
           ...this.formData,
