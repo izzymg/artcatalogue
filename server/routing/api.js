@@ -124,7 +124,7 @@ router.post(
     // Generate item ids
     if(formData.items && formData.items.length > 0) {
       formData.items.forEach((item, i) => {
-        item.id = `${mediums.indexOf(item.medium)}-${formData.firstName[0].toUpperCase()}${formData.lastName[0].toUpperCase()}-${i}`;
+        item.id = `${formData.siteMap}-${formData.firstName[0].toUpperCase()}${formData.lastName[0].toUpperCase()}-${i}`;
       });
     }
     
