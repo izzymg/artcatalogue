@@ -72,18 +72,21 @@
         }
       }
     }
-    .items-table {
-      thead {
-        background: hsl(0, 0%, 85%);
-        color: hsl(0, 0%, 15%);
-        th {
-          font-weight: normal;
-          font-size: 0.9em;
+    .items-table-wrapper {
+      .items-table {
+        width: 100%;
+        thead {
+          background: hsl(0, 0%, 85%);
+          color: hsl(0, 0%, 15%);
+          th {
+            font-weight: normal;
+            font-size: 0.9em;
+          }
         }
-      }
-      td, th {
-        padding: 10px;
-        text-align: center;
+        td, th {
+          padding: 10px;
+          text-align: center;
+        }
       }
     }
   }
