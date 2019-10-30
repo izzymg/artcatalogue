@@ -6,7 +6,7 @@ const router = new Router({
   onMethodNotAllowed: (ctx) => ctx.body = "405: Method not allowed.",
 });
 
-const sections = ["PHEA", "Jewellery/Textiles", "Paintings", "Sculptures/Ceramics", "Printmakings"];
+const sections = ["PHEA", "Jewellery/Textile", "Painting", "Sculpture/Ceramics", "Printmaking"];
 const mediums = [
   "Performance",
   "Digital file",
