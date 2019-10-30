@@ -1,6 +1,8 @@
-# ArtSite - Otago Polytechnic
+# Art Catalogue - Otago Polytechnic
 
-Art form upload
+Web form for Otago Polytechnic art school catalogue generation.
+
+Written in VueJS and NodeJS with MariaDB.
 
 # Prerequisites
 
