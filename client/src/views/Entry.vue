@@ -2,7 +2,10 @@
   <div class="entry">
     <span v-if="message" class="message" v-html="message"></span>
     <div v-if="entry" class="entry-display">
-      <h1 class="entry-section"> {{ entry.section }}</h1>
+      <div class="entry-header">
+        <h1 class="entry-section"> {{ entry.section }}</h1>
+        <img class="entry-logo" src="../assets/Web_DSA_RGB_H.jpg">
+      </div>
       <div class="entry-info">
         <div class="name-title-wrapper">
           <h3 class="entry-name"> {{ name }} </h3>
@@ -47,6 +50,15 @@
     margin: 0 auto;
     hr {
       width: 100%;
+    }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .entry-logo {
+        width: 40%;
+        height: 40%;
+      }
     }
     .entry-section {
       font-weight: bold;
