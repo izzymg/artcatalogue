@@ -1,6 +1,6 @@
 # Art Catalogue - Otago Polytechnic
 
-Web form for Otago Polytechnic art school catalogue generation.
+Web form for Otago Polytechnic art catalogue generation.
 
 Written in VueJS and NodeJS with MariaDB. 🐳
 
