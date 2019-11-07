@@ -33,7 +33,7 @@
               <td> {{ item.itemId }} </td>
               <td> {{ item.itemTitle || "Untitled item" }} </td>
               <td> {{ item.medium }} </td>
-              <td> ${{ item.value / 100 }} </td>
+              <td> {{item.nfs ?  "Not for sale" : `$${item.value}` }} </td>
               <td v-if="item.dimensions"> {{ item.dimensions }} </td>
             </tr>
           </tbody>

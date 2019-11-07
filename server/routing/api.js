@@ -71,9 +71,9 @@ function validateForm({ firstName, lastName, title, section, siteMap, items }) {
   } else {
     items.forEach((item, i) => {
       const val = parseInt(item.value, 10);
-      if(isNaN(val) || val > (1000000 * 100) || val < 0) {
+      if(isNaN(val) || val < 0 || val > 100000) {
         // i is zero indexed
-        errors.push(`Item ${i + 1} has an invalid price - must be between $0 and $1m`);
+        errors.push(`Item ${i + 1} has an invalid price`);
       }
       if(mediums.indexOf(item.medium) == -1) {
         errors.push(`Item ${i + 1} has an invalid medium`);

@@ -4,7 +4,7 @@
       <form class="catalogue-item-form">
         <label class="desc"> Title </label>
         <div class="title-wrapper">
-          <input type="text" required v-model="item.title" :placeholder="itemPlaceholder" @input="updateState">
+          <input type="text" required v-model="item.title" :placeholder="itemPlaceholder" @input="1">
         </div>
         <label class="desc"> Medium </label>
         <div class="medium-wrapper">
@@ -14,17 +14,14 @@
         </div>
         <label class="desc"> Dimensions are optional </label>
         <div class="dimensions-wrapper">
-          <input v-model="item.dimensions" type="text" placeholder="Dimensions" value="20x20x20">
+          <input v-model="item.dimensions" type="text" placeholder="Dimensions" value="20x20x20" @change="updateState">
           <label class="little-label"> (WxHxL) Centimetres </label>
         </div>
-        <label class="desc"> Pricing is optional </label>
+        <input v-model="item.nfs" type="checkbox" @change="updateState">
+        <label class="little-label"> Not For Sale </label>
         <div class="dollars-wrapper">
-          <input v-model="item.dollars" type="number" placeholder="Dollars">
+          <input :disabled="item.nfs" v-model="item.value" type="number" placeholder="Dollars" @change="updateState">
           <label class="little-label">$ Dollars</label>
-        </div>
-        <div class="dollars-wrapper">
-          <input v-model="item.cents" type="number" placeholder="Cents">
-          <label class="little-label">¢ Cents</label>
         </div>
       </form>
     </transition>
@@ -39,8 +36,8 @@ export default {
       item: {
         title: null,
         medium: this.mediums[0],
-        dollars: 0,
-        cents: 0,
+        value: 0,
+        nfs: false,
         dimensions: "20x20x20"
       },
     };
@@ -61,7 +58,8 @@ export default {
         id: this.id,
         title: this.item.title,
         medium: this.item.medium,
-        value: this.value,
+        value: this.item.value,
+        nfs: this.item.nfs,
         dimensions: this.item.dimensions,
       });
     }
@@ -70,38 +68,6 @@ export default {
     itemPlaceholder() {
       return `Item ${this.id}`;
     },
-    dollars() {
-      return this.item.dollars;
-    },
-    cents() {
-      return this.item.cents;
-    },
-    // Value of items stored as an integer of cents
-    // Not graphically exposed
-    value() {
-      return (this.item.dollars * 100) + this.item.cents;
-    },
-  },
-  watch: {
-    dollars(n) {
-      this.item.dollars = parseInt(n, 10) || 0;
-      if(this.item.dollars < 0) {
-        this.item.dollars = 0;
-      }
-    },
-    cents(n) {
-      this.item.cents = parseInt(n, 10) || 0;
-      if(this.item.cents < 0) {
-        this.item.cents = 0;
-      } else if(this.item.cents > 99) {
-        this.item.dollars++;
-        this.item.cents = 0;
-      }
-    },
-    value() {
-      // Update state on value change, not on dollar/cent change
-      this.updateState();
-    }
   },
 };
 </script>
@@ -127,7 +93,7 @@ export default {
       margin: 5px 0;
     }
 
-    .dollars-wrapper, .cents-wrapper {
+    .dollars-wrapper {
       display: flex;
       align-items: center;
     }

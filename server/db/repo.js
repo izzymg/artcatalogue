@@ -17,6 +17,7 @@ const itemFields = `
   items.title as itemTitle,
   items.id as itemId,
   items.value as value,
+  items.nfs as nfs,
   items.dimensions as dimensions
 `;
 
@@ -82,9 +83,10 @@ const insertForm = async function({ firstName, lastName, title, section, siteMap
                 id = ?,
                 title = ?,
                 value = ?,
+                nfs = ?,
                 medium = ?,
                 dimensions = ?`,
-        values: [uid, item.id, item.title, item.value, item.medium, item.dimensions],
+        values: [uid, item.id, item.title, item.value, item.nfs || false, item.medium, item.dimensions],
       });
     });
     await conn.query("COMMIT");
