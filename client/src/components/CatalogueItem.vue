@@ -1,26 +1,26 @@
 <template>
   <div class="catalogue-item">
     <transition name="fade">
-      <form class="catalogue-item-form">
+      <form class="catalogue-item-form" @change="updateState">
         <label class="desc"> Title </label>
         <div class="title-wrapper">
           <input type="text" required v-model="item.title" :placeholder="itemPlaceholder" @input="1">
         </div>
         <label class="desc"> Medium </label>
         <div class="medium-wrapper">
-          <select required v-model="item.medium" @change="updateState">
+          <select required v-model="item.medium">
             <option v-for="medium in mediums" :key="medium" :value="medium"> {{ medium }} </option>
           </select>
         </div>
         <label class="desc"> Dimensions are optional </label>
         <div class="dimensions-wrapper">
-          <input v-model="item.dimensions" type="text" placeholder="Dimensions" value="20x20x20" @change="updateState">
+          <input v-model="item.dimensions" type="text" placeholder="Dimensions" value="20x20x20">
           <label class="little-label"> (WxHxL) Centimetres </label>
         </div>
-        <input v-model="item.nfs" type="checkbox" @change="updateState">
+        <input v-model="item.nfs" type="checkbox">
         <label class="little-label"> Not For Sale </label>
         <div class="dollars-wrapper">
-          <input :disabled="item.nfs" v-model="item.value" type="number" placeholder="Dollars" @change="updateState">
+          <input :disabled="item.nfs" v-model="item.value" type="number" placeholder="Dollars">
           <label class="little-label">$ Dollars</label>
         </div>
       </form>
