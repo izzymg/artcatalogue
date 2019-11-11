@@ -56,6 +56,9 @@ function validateForm({ firstName, lastName, title, section, siteMap, items }) {
   if(title && title.length > 50) {
     errors.push("Title must not exceed 50 characters");
   }
+  if(!title) {
+    errors.push("Entry must have a title");
+  }
 
   if(sections.indexOf(section) == -1) {
     errors.push("Invalid section");

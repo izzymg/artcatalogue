@@ -12,7 +12,7 @@
         <input v-model="formData.lastName" type="text" placeholder="Last Name">
       </div>
       <div class="ex-wrapper">
-        <input v-model="formData.title" type="text" placeholder="Exhibition Title (opt.)">
+        <input v-model="formData.title" type="text" placeholder="Exhibition Title">
         <input v-model="formData.siteMap" type="number" max="100" placeholder="Site MAP number">
         <label class="little-label"> Site MAP number </label>
       </div>
