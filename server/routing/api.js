@@ -112,10 +112,7 @@ router.get(
 router.post(
   "/entries",
   async function(ctx) {
-
-    const ip = await repo.getIp(ctx.ip);
-    ctx.assert(!ip, 400, "Please wait before you can do that again");
-
+    
     const formData = await cobody.json(ctx, { strict: true, });
     console.log({ items: formData.items });
     const formErrors = validateForm(formData);
